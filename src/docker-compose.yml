@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  elasticstack-api:
+    image: ${DOCKER_REGISTRY-}elasticstack-api
+    build:
+      context: .
+      dockerfile: Services/ElasticStack/ElasticStack.API/Dockerfile

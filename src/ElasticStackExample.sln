@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5FBF7D1C-A66A-47D6-893E-468674D8F770}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{3BB8E8D4-4D2D-4D0B-8F6A-E18732F64A0F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ElasticStack", "ElasticStack", "{5F3E4F1C-9FA2-4332-AE66-357C5625CE6D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElasticStack.API", "Services\ElasticStack\ElasticStack.API\ElasticStack.API.csproj", "{441AD652-2626-46CE-BBA3-F8AC375B88A9}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{00B76674-FA68-45C2-944C-B5EB027145E2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{441AD652-2626-46CE-BBA3-F8AC375B88A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{441AD652-2626-46CE-BBA3-F8AC375B88A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{441AD652-2626-46CE-BBA3-F8AC375B88A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{441AD652-2626-46CE-BBA3-F8AC375B88A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00B76674-FA68-45C2-944C-B5EB027145E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00B76674-FA68-45C2-944C-B5EB027145E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00B76674-FA68-45C2-944C-B5EB027145E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00B76674-FA68-45C2-944C-B5EB027145E2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3BB8E8D4-4D2D-4D0B-8F6A-E18732F64A0F} = {5FBF7D1C-A66A-47D6-893E-468674D8F770}
+		{5F3E4F1C-9FA2-4332-AE66-357C5625CE6D} = {3BB8E8D4-4D2D-4D0B-8F6A-E18732F64A0F}
+		{441AD652-2626-46CE-BBA3-F8AC375B88A9} = {5F3E4F1C-9FA2-4332-AE66-357C5625CE6D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9CFF407E-AAA0-462A-9C7E-42D8D3B3DC9B}
+	EndGlobalSection
+EndGlobal
