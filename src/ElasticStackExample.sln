@@ -13,6 +13,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElasticStack.API", "Service
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{00B76674-FA68-45C2-944C-B5EB027145E2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logging", "Logging", "{239B0A31-F575-4052-AA76-5FBDE1C45CC1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "elasticsearch", "elasticsearch", "{B5C41B22-7CFA-4859-BEF3-594FD652E002}"
+	ProjectSection(SolutionItems) = preProject
+		Logging\elasticsearch\elasticsearch.yml = Logging\elasticsearch\elasticsearch.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "logstash", "logstash", "{CB99C533-221D-4C0D-A01F-1A37477EBF99}"
+	ProjectSection(SolutionItems) = preProject
+		Logging\logstash\logstash.conf = Logging\logstash\logstash.conf
+		Logging\logstash\logstash.yml = Logging\logstash\logstash.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +48,9 @@ Global
 		{3BB8E8D4-4D2D-4D0B-8F6A-E18732F64A0F} = {5FBF7D1C-A66A-47D6-893E-468674D8F770}
 		{5F3E4F1C-9FA2-4332-AE66-357C5625CE6D} = {3BB8E8D4-4D2D-4D0B-8F6A-E18732F64A0F}
 		{441AD652-2626-46CE-BBA3-F8AC375B88A9} = {5F3E4F1C-9FA2-4332-AE66-357C5625CE6D}
+		{239B0A31-F575-4052-AA76-5FBDE1C45CC1} = {5FBF7D1C-A66A-47D6-893E-468674D8F770}
+		{B5C41B22-7CFA-4859-BEF3-594FD652E002} = {239B0A31-F575-4052-AA76-5FBDE1C45CC1}
+		{CB99C533-221D-4C0D-A01F-1A37477EBF99} = {239B0A31-F575-4052-AA76-5FBDE1C45CC1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9CFF407E-AAA0-462A-9C7E-42D8D3B3DC9B}

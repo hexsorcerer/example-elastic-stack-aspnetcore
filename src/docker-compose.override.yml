@@ -1,8 +1,68 @@
 version: '3.4'
 
 services:
+
+  elasticsearch:
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: false
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    expose:
+      - "9200"
+      - "9300"
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+      - type: bind
+        source: Logging/elasticsearch/elasticsearch.yml
+        target: /etc/elasticsearch/elasticsearch.yml:ro
+    healthcheck:
+      test: ["CMD-SHELL", "curl --silent --fail localhost:9200/_cluster/health || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+
+  logstash:
+    environment:
+      discovery.seed_hosts: logstash
+      LS_JAVA_OPTS: "-Xms512m -Xmx512m"
+    ports:
+      - "5000:5000/tcp"
+      - "5000:5000/udp"
+      - "5044:5044"
+      - "9600:9600"
+    expose:
+      - "5000"
+      - "5044"
+      - "9600"
+    volumes:
+      - type: bind
+        source: Logging/logstash/logstash.conf
+        target: /usr/share/logstash/pipeline/logstash.conf:ro
+      - type: bind
+        source: Logging/logstash/logstash.yml
+        target: /usr/share/logstash/config//logstash.yml:ro
+
+  kibana:
+    volumes:
+      - kibana-data:/usr/share/kibana/data
+    environment:
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    expose:
+      - "5601"
+
   elasticstack-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "8000:80"
+
+volumes:
+  elasticsearch-data:
+    driver: local
+  kibana-data:
+    driver: local
