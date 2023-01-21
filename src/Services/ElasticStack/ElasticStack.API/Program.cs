@@ -1,7 +1,7 @@
 using System.Globalization;
 using System.Reflection;
 using Serilog;
-using Serilog.Formatting.Json;
+using Serilog.Formatting.Compact;
 
 var configuration = GetConfiguration();
 Log.Logger = CreateSerilogLogger(configuration);
@@ -48,7 +48,7 @@ Serilog.ILogger CreateSerilogLogger(IConfiguration config)
         .WriteTo.Http(
             requestUri: "http://logstash:5000",
             queueLimitBytes: null,
-            textFormatter: new JsonFormatter(),
+            textFormatter: new RenderedCompactJsonFormatter(),
             configuration: config)
         .CreateLogger();
 }

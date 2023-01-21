@@ -21,7 +21,7 @@ public class WeatherForecastController : ControllerBase
     [HttpGet(Name = "GetWeatherForecast")]
     public IEnumerable<WeatherForecast> Get()
     {
-        _logger.LogInformation("Yo this is the WeatherController!");
+        _logger.LogInformation("Yo this is {User} from {ControllerName}", "Bobby Tables", nameof(WeatherForecastController));
 
         return Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {
