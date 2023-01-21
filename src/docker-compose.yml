@@ -33,5 +33,7 @@ services:
     build:
       context: .
       dockerfile: Services/ElasticStack/ElasticStack.API/Dockerfile
+    networks:
+      elastic-stack-example:
     depends_on:
       - logstash

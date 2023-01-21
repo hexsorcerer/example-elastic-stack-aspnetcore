@@ -28,3 +28,9 @@
 
 [Configuring the Elasticsearch for a single instance](https://www.ibm.com/docs/en/product-master/12.0.0?topic=elasticsearch-configuring-single-instance)
 
+# Logstash
+
+[Creating a Logstash pipeline](https://www.elastic.co/guide/en/logstash/current/configuration.html)
+
+[Logstash configuration examples](https://www.elastic.co/guide/en/logstash/current/config-examples.html)
+
