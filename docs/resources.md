@@ -1,42 +1,114 @@
 # Elasticsearch
 
+## Basic Configuration
+
 [Discovery and cluster formation settings](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-discovery-settings.html#modules-discovery-settings)
 
-[Security settings in Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/security-settings.html)
-
-[Start the Elasticstack with security enabled automatically](https://www.elastic.co/guide/en/elasticsearch/reference/current/configuring-stack-security.html)
-
-[Advanced Configuration](https://www.elastic.co/guide/en/elasticsearch/reference/current/advanced-configuration.html)
-
-[Set the JVM heap size](https://www.elastic.co/guide/en/elasticsearch/reference/current/advanced-configuration.html#set-jvm-heap-size)
-
-[Important Elasticsearch configuration](https://www.elastic.co/guide/en/elasticsearch/reference/current/important-settings.html)
-
-[Size your shards](https://www.elastic.co/guide/en/elasticsearch/reference/current/size-your-shards.html)
-
-[Master-eligible nodes should have at least 1GB of heap per 3000 indices](https://www.elastic.co/guide/en/elasticsearch/reference/current/size-your-shards.html#shard-count-recommendation)
-
-[Networking](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-network.html)
-
-[Install Elasticsearch with Docker](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html)
-
-[Configuring Elasticsearch with Docker](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-configuration-methods)
-
-[Config files location](https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html#config-files-location)
-
-[elasticsearch.yml](https://github.com/elastic/elasticsearch/blob/main/distribution/src/config/elasticsearch.yml)
+You need to set the ```discovery.type``` setting to ```single-node``` as a basic
+configuration step, and that setting is documented here. You'll also find here
+all of the other settings to work with nodes/clusters.
 
 [Configuring the Elasticsearch for a single instance](https://www.ibm.com/docs/en/product-master/12.0.0?topic=elasticsearch-configuring-single-instance)
 
-[What are the rules for index names in Elasticsearch?](https://stackoverflow.com/a/41585755)
+Has a little bit more detail about some settings you might want to consider for
+running a basic Elasticsearch instance, I found this helpful to fill in some
+blanks from the official docs.
+
+[Networking](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-network.html)
+
+I would consider this a basic configuration item, because if you can't connect
+then you can't log. The example is primarily concerned with how to control the
+address and port you listen on, but this document covers every network seting
+available if you need to know more than what the example shows.
+
+[Config files location](https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html#config-files-location)
+
+Shows the different configuration files available to use, and where they should
+be located. I believe that all of the settings in the config file can also be
+set via environment variables, but if you prefer to use the config files for
+whatever reason this is some helpful info.
+
+[elasticsearch.yml](https://github.com/elastic/elasticsearch/blob/main/distribution/src/config/elasticsearch.yml)
+
+Here's an example config file you can copy/paste to get started if you don't
+have one already.
+
+## Security
+
+[Security settings in Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/security-settings.html)
+
+We set the ```xpack.security.enabled``` to ```false``` to avoid having to deal
+with issues surrounding TLS/certificates in the example. All of the settings
+related to the various security options can be found here.
+
+[Start the Elasticstack with security enabled automatically](https://www.elastic.co/guide/en/elasticsearch/reference/current/configuring-stack-security.html)
+
+Describes in more detail the security-related actions that occur when you start
+Elasticsearch for the first time, and how to get Kibana configured to work with
+security enabled. We don't use this in the example but it's important to know
+for a real-world deployment.
+
+## Advanced Configuration
+
+[Important Elasticsearch configuration](https://www.elastic.co/guide/en/elasticsearch/reference/current/important-settings.html)
+
+These are the settings that according to Elasticsearch "must be considered
+before using your cluster in production".
+
+[Advanced Configuration](https://www.elastic.co/guide/en/elasticsearch/reference/current/advanced-configuration.html)
+
+This is mostly configuration of the JVM.
+
+[Set the JVM heap size](https://www.elastic.co/guide/en/elasticsearch/reference/current/advanced-configuration.html#set-jvm-heap-size)
+
+A subset of the above document, which I add here only because I used this option
+in the example because I think you should know how to control the memory usage
+on this when running locally because we don't always have 64GB+ RAM avaiable all
+the time.
+
+[Size your shards](https://www.elastic.co/guide/en/elasticsearch/reference/current/size-your-shards.html)
+
+Sharding is an advanced topic that's not dealt with at all in this example, but
+I included this link because it covers some best practices related to sizing
+the JVM heap.
+
+[Node](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-node.html)
+
+Contains additional information about the different node roles, which I thought
+was helpful to understand a little better what running as a single-node affects.
+
+[Master-eligible nodes should have at least 1GB of heap per 3000 indices](https://www.elastic.co/guide/en/elasticsearch/reference/current/size-your-shards.html#shard-count-recommendation)
+
+A subset of the above document, clearly states how big your JVM heap should be
+relative to the amount of logs you're storing, removes the guesswork out of this
+setting.
+
+## Docker
+
+[Install Elasticsearch with Docker](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html)
+
+Shows what images to use, settings that need to be set, and has examples for
+both CLI commands and docker-compose. Was very helpful in putting this example
+together.
+
+[Configuring Elasticsearch with Docker](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-configuration-methods)
+
+A subset of the above document, goes into more detail about how you can use any
+setting as an envorinment variable, which isn't obvious if you don't already
+know you can do that. Also has some details on how to bind-mount config files
+correctly.
+
+## Elastic Common Schema (ECS)
+
+[What is ECS?](https://www.elastic.co/guide/en/ecs/current/ecs-reference.html)
+
+Covers the set of common fields that all messages stored in Elasticsearch must
+have. Great for understanding all the other fields that just magically appear
+on your logs.
 
 [ECS Field Reference](https://www.elastic.co/guide/en/ecs/current/ecs-field-reference.html)
 
-[[discuss] removal of @timestamp field](https://github.com/elastic/logstash/issues/10581)
-
-[Configuring Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html#_config_file_format)
-
-[Node](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-node.html#master-node)
+Details on all the ECS fields, if you need to understand a particular one.
 
 # Logstash
 
@@ -57,6 +129,22 @@
 [Creating a Logstash pipeline](https://www.elastic.co/guide/en/logstash/current/configuration.html)
 
 [Introducing the Logstash HTTP input plugin](https://www.elastic.co/blog/introducing-logstash-input-http-plugin)
+
+[What are the rules for index names in Elasticsearch?](https://stackoverflow.com/a/41585755)
+
+While this is technically an Elasticsearch thing and not a logstash thing, I put
+it here because logstash is actually where we configure the index names in the
+example. Worth pointing out the specific limitation that index names can't have
+'.', which prevented me from using a variable to simplify the logstash config.
+
+[[discuss] removal of @timestamp field](https://github.com/elastic/logstash/issues/10581)
+
+Ran into this issue myself while working on the example, the Serilog formatter
+adds the @t field with the timestamp, and @timestamp already existed, so when I
+attempted to remove @timestamp and keep @t, logs just silently stopped working
+and it wasn't clear why at first. I ended up removing the @t field instead, but
+wanted to make sure to point out that you currently can't do this in case you
+try.
 
 # Serilog
 
