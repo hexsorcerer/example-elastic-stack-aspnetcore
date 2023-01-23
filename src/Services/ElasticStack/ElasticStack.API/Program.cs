@@ -48,7 +48,7 @@ Serilog.ILogger CreateSerilogLogger(IConfiguration config)
         .WriteTo.Http(
             requestUri: "http://logstash:5000",
             queueLimitBytes: null,
-            textFormatter: new RenderedCompactJsonFormatter(),
+            textFormatter: new CompactJsonFormatter(),
             configuration: config)
         .CreateLogger();
 }

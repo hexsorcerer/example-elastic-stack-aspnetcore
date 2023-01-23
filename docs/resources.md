@@ -110,6 +110,14 @@ on your logs.
 
 Details on all the ECS fields, if you need to understand a particular one.
 
+[Metadata fields](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-fields.html)
+
+Not exactly ECS, but Elasticsearch stores documents using these metadata fields
+so I would consider it part of the schema. The most important field is
+```_source```, which contains your actual event JSON object sent from logstash.
+If you were wondering what all those other fields are and where they came from,
+here you go!
+
 # Logstash
 
 [Creating a Logstash pipeline](https://www.elastic.co/guide/en/logstash/current/configuration.html)
