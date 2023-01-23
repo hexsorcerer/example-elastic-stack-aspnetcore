@@ -118,6 +118,17 @@ so I would consider it part of the schema. The most important field is
 If you were wondering what all those other fields are and where they came from,
 here you go!
 
+[Strings are dead, long live strings!](https://www.elastic.co/blog/strings-are-dead-long-live-strings)
+
+The best documentation I've found so far that explains what the ```fields```
+object is, and why all those seemingly-duplicate values are stored in there
+with a ```keyword``` suffix (it's for better searching).
+
+[difference between a field and the field.keyword](https://stackoverflow.com/a/48875105)
+
+This is the stackoverflow question that led me to discover the 'strings are
+dead...' blog post.
+
 # Logstash
 
 [Creating a Logstash pipeline](https://www.elastic.co/guide/en/logstash/current/configuration.html)
@@ -133,6 +144,11 @@ here you go!
 [Parsing Logs with Logstash](https://www.elastic.co/guide/en/logstash/current/advanced-pipeline.html)
 
 [Elasticsearch output plugin](https://www.elastic.co/guide/en/logstash/current/plugins-outputs-elasticsearch.html)
+
+Some excellent guidance on how to best use the output plugin can be found here.
+Be sure to check out the optimization when writing to multiple indexes by using
+```@metadata``` to create dynamic fields, this will allow you to write to
+multiple indexes with a single ```elasticsearch``` block.
 
 [Creating a Logstash pipeline](https://www.elastic.co/guide/en/logstash/current/configuration.html)
 
@@ -153,6 +169,24 @@ attempted to remove @timestamp and keep @t, logs just silently stopped working
 and it wasn't clear why at first. I ended up removing the @t field instead, but
 wanted to make sure to point out that you currently can't do this in case you
 try.
+
+[Tips and best practices](https://www.elastic.co/guide/en/logstash/current/tips.html)
+
+Contains the helpful trick to use ```@metadata``` to test for the existence of
+a field in the incoming message.
+
+[logstash extract and move nested fields into new parent field](https://stackoverflow.com/a/50268552)
+
+The stackoverflow question that showed me how to structure individual fields
+into a new JSON object.
+
+[Mutate filter plugin](https://www.elastic.co/guide/en/logstash/current/plugins-filters-mutate.html)
+
+All the docs on the mutate filter.
+
+[Http input plugin](https://www.elastic.co/guide/en/logstash/current/plugins-inputs-http.html)
+
+All the docs on the http input plugin.
 
 # Serilog
 
