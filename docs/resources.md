@@ -1,7 +1,5 @@
 # Elasticsearch
-
 ## Basic Configuration
-
 [Discovery and cluster formation settings](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-discovery-settings.html#modules-discovery-settings)
 
 You need to set the ```discovery.type``` setting to ```single-node``` as a basic
@@ -34,7 +32,6 @@ Here's an example config file you can copy/paste to get started if you don't
 have one already.
 
 ## Security
-
 [Security settings in Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/security-settings.html)
 
 We set the ```xpack.security.enabled``` to ```false``` to avoid having to deal
@@ -49,7 +46,6 @@ security enabled. We don't use this in the example but it's important to know
 for a real-world deployment.
 
 ## Advanced Configuration
-
 [Important Elasticsearch configuration](https://www.elastic.co/guide/en/elasticsearch/reference/current/important-settings.html)
 
 These are the settings that according to Elasticsearch "must be considered
@@ -84,7 +80,6 @@ relative to the amount of logs you're storing, removes the guesswork out of this
 setting.
 
 ## Docker
-
 [Install Elasticsearch with Docker](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html)
 
 Shows what images to use, settings that need to be set, and has examples for
@@ -99,7 +94,6 @@ know you can do that. Also has some details on how to bind-mount config files
 correctly.
 
 ## Elastic Common Schema (ECS)
-
 [What is ECS?](https://www.elastic.co/guide/en/ecs/current/ecs-reference.html)
 
 Covers the set of common fields that all messages stored in Elasticsearch must
@@ -130,30 +124,28 @@ This is the stackoverflow question that led me to discover the 'strings are
 dead...' blog post.
 
 # Logstash
-
+## Basic Configuration
 [Creating a Logstash pipeline](https://www.elastic.co/guide/en/logstash/current/configuration.html)
+
+The most basic example of building a logstash pipeline, excellent starting point.
 
 [Logstash configuration examples](https://www.elastic.co/guide/en/logstash/current/config-examples.html)
 
+Has some really good examples of more realistic setups, gets into filters and
+conditional statements.
+
 [How to create multiple indexes in logstash.conf file](https://stackoverflow.com/a/33820688)
+
+Where I learned how to control what index is being written to. I read somewhere
+else later than it's better to try and keep the elasticsearch outputs to a
+minimum because each one opens a new connection.
 
 [How to use Logstash to parse and import JSON data into Elasticsearch](https://www.youtube.com/watch?v=_qgS1m6NTIE)
 
-[Using the Mutate Filter in Logstash](https://logz.io/blog/logstash-mutate-filter/)
+One of the best video walkthroughs I was able to find, explains things very
+well and shows some realistic examples.
 
-[Parsing Logs with Logstash](https://www.elastic.co/guide/en/logstash/current/advanced-pipeline.html)
-
-[Elasticsearch output plugin](https://www.elastic.co/guide/en/logstash/current/plugins-outputs-elasticsearch.html)
-
-Some excellent guidance on how to best use the output plugin can be found here.
-Be sure to check out the optimization when writing to multiple indexes by using
-```@metadata``` to create dynamic fields, this will allow you to write to
-multiple indexes with a single ```elasticsearch``` block.
-
-[Creating a Logstash pipeline](https://www.elastic.co/guide/en/logstash/current/configuration.html)
-
-[Introducing the Logstash HTTP input plugin](https://www.elastic.co/blog/introducing-logstash-input-http-plugin)
-
+## Best Practices
 [What are the rules for index names in Elasticsearch?](https://stackoverflow.com/a/41585755)
 
 While this is technically an Elasticsearch thing and not a logstash thing, I put
@@ -180,22 +172,57 @@ a field in the incoming message.
 The stackoverflow question that showed me how to structure individual fields
 into a new JSON object.
 
-[Mutate filter plugin](https://www.elastic.co/guide/en/logstash/current/plugins-filters-mutate.html)
+## Plugins
+### Input
+[Introducing the Logstash HTTP input plugin](https://www.elastic.co/blog/introducing-logstash-input-http-plugin)
 
-All the docs on the mutate filter.
+Excellent introduction to the input plugin for noobs like me.
 
 [Http input plugin](https://www.elastic.co/guide/en/logstash/current/plugins-inputs-http.html)
 
 All the docs on the http input plugin.
 
-# Serilog
+### Filters
+[Mutate filter plugin](https://www.elastic.co/guide/en/logstash/current/plugins-filters-mutate.html)
 
-[Writing Log Events](https://github.com/serilog/serilog/wiki/Writing-Log-Events)
+All the docs on the mutate filter.
+
+[Using the Mutate Filter in Logstash](https://logz.io/blog/logstash-mutate-filter/)
+
+An unofficial walkthrough for the mutate filter, helps to hear it described from
+a different perspective than the official docs.
+
+[Parsing Logs with Logstash](https://www.elastic.co/guide/en/logstash/current/advanced-pipeline.html)
+
+The main draw here is a walkthrough of some grok usage.
+
+### Output
+[Elasticsearch output plugin](https://www.elastic.co/guide/en/logstash/current/plugins-outputs-elasticsearch.html)
+
+Some excellent guidance on how to best use the output plugin can be found here.
+Be sure to check out the optimization when writing to multiple indexes by using
+```@metadata``` to create dynamic fields, this will allow you to write to
+multiple indexes with a single ```elasticsearch``` block.
+
+# Serilog
+## Basic
+[Serilog.Sinks.Http](https://github.com/FantasticFiasco/serilog-sinks-http)
+
+Shows basic sink usage, good when getting setup and configured application-side.
 
 [Serilog.Formatting.Compact](https://github.com/serilog/serilog-formatting-compact)
 
-[Serilog.Sinks.Http](https://github.com/FantasticFiasco/serilog-sinks-http)
+This is really helpful to get an idea of what your log messages are going to
+look like. Might be worth pointing out that the fields you see here will be
+on the log event, but there will be other fields added from other places also,
+like the http input plugin to logstash.
 
-# Message Templates
+## Advanced
+[Writing Log Events](https://github.com/serilog/serilog/wiki/Writing-Log-Events)
+
+Some really good advanced Serilog usage in here, I really need to come back to
+this and dig into it some more.
 
 [messagetemplates.org](https://messagetemplates.org/)
+
+A formal description of the message template syntax used in Serilog.
