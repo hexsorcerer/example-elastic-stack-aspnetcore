@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace ElasticStackExample.Controllers;
+namespace ElasticStack.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
@@ -21,7 +21,14 @@ public class WeatherForecastController : ControllerBase
     [HttpGet(Name = "GetWeatherForecast")]
     public IEnumerable<WeatherForecast> Get()
     {
-        _logger.LogInformation("Yo this is {User} from {ControllerName}", "Bobby Tables", nameof(WeatherForecastController));
+        var file = new Elastic.CommonSchema.File
+        {
+            Path = "/home/me/mystuff",
+            Name = "somefile",
+            Type = "txt"
+        };
+
+        _logger.LogInformation("{@File}", file);
 
         return Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {

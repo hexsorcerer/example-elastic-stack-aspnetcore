@@ -26,7 +26,6 @@ services:
 
   logstash:
     environment:
-      discovery.seed_hosts: logstash
       LS_JAVA_OPTS: "-Xms512m -Xmx512m"
     ports:
       - "5000:5000/tcp"

@@ -1,0 +1,2 @@
+# Logstash Configuration
+## Environment Variables

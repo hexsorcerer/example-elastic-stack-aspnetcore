@@ -1,4 +1,4 @@
-namespace ElasticStackExample;
+namespace ElasticStack.API;
 
 public class WeatherForecast
 {

@@ -1,15 +1,33 @@
 using System.Globalization;
 using System.Reflection;
+using Elastic.CommonSchema.Serilog;
+using ElasticStack.API.Services;
 using Serilog;
-using Serilog.Formatting.Compact;
 
 var configuration = GetConfiguration();
 Log.Logger = CreateSerilogLogger(configuration);
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog());
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+builder.Host.UseSerilog((ctx, config) =>
+{
+    IEcsTextFormatterConfigurationFactory factory = new EcsTextFormatterConfigurationFactory();
+    var formatterConfig = factory.BuildEcsTextFormatterConfiguration(ctx, config);
+    var formatter = new EcsTextFormatter(formatterConfig);
+
+    config.Enrich.WithProperty("ApplicationContext", Assembly.GetExecutingAssembly().GetName().Name);
+
+    config.WriteTo.Console(formatProvider: CultureInfo.InvariantCulture);
+    config.WriteTo.Http(
+        requestUri: "http://logstash:5000",
+        queueLimitBytes: null,
+        textFormatter: formatter,
+        configuration: ctx.Configuration);
+});
 
 // Add services to the container.
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -48,7 +66,7 @@ Serilog.ILogger CreateSerilogLogger(IConfiguration config)
         .WriteTo.Http(
             requestUri: "http://logstash:5000",
             queueLimitBytes: null,
-            textFormatter: new CompactJsonFormatter(),
+            textFormatter: new EcsTextFormatter(),
             configuration: config)
         .CreateLogger();
 }
