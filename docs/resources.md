@@ -226,3 +226,58 @@ this and dig into it some more.
 [messagetemplates.org](https://messagetemplates.org/)
 
 A formal description of the message template syntax used in Serilog.
+
+## ECS
+
+[Elastic Common Schema .NET library and integrations released](https://www.elastic.co/blog/elastic-common-schema-dotnet-library-and-integrations-released-for-elasticsearch)
+
+A blog post introducing the package, which oddly enough contains WAY more info
+than the documentation. Definitely recommend starting here.
+
+[ecs-dotnet](https://github.com/elastic/ecs-dotnet)
+
+The project for adding ECS support to .NET/Serilog. This does provide you with
+a useable schema, but getting it into your logs the way you expect requires some
+more effort.
+
+[ECS Logging .NET Get Started](https://www.elastic.co/guide/en/ecs-logging/dotnet/master/setup.html)
+
+Shows the absolute most basic setup for using the ECS text formatter for
+Serilog. Good first step, but was missing some critical info on how to add
+fields defined in the ECS, which I had to figure out elsewhere.
+
+[[BUG] Using Elastic.CommonSchema.User, but still showing under _metadata
+](https://github.com/elastic/ecs-dotnet/issues/133#issuecomment-777576172)
+
+One of the most important links here, this contains the original solution I used
+to get Serilog to output ECS-formatted JSON by using structured properties in
+the log message. It's clunky but it does work!
+
+# Kibana
+
+[REST API](https://www.elastic.co/guide/en/kibana/current/api.html)
+
+The base API docs.
+
+[Export objects API](https://www.elastic.co/guide/en/kibana/current/saved-objects-api-export.html)
+
+Provides the API documentation for how to export stuff from Kibana. Be careful
+on those examples, they don't work as-is. At least for me, using curl 7.83.1 on
+Windows required me to reformat the command a little bit.
+
+[Import objects API](https://www.elastic.co/guide/en/kibana/current/saved-objects-api-import.html)
+
+The counterpart of the export objects API. Things to look out for here are that
+the file you import must be formatted as ndjson (which is should be if you
+exported it). Also you must include the Content-Type header here, the call
+failed when I omitted it.
+
+[Unable to upload ndjson files to /api/saved_objects/_import](https://forum.opensearch.org/t/unable-to-upload-ndjson-files-to-api-saved-objects-import/3110/2)
+
+Ran into this issue myself while trying to figure out how to do this, turns out
+you "must" omit the Content-Type header when importing or else it doesn't work
+(in contrast, you "must include" the Content-Type header for the export
+command.) You also need to use ```--form file=@<path-to-file>``` and not the
+```-d``` option that you see in many similar examples floating around out there.
+
+
