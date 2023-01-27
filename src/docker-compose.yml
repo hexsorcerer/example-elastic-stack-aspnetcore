@@ -17,7 +17,8 @@ services:
     networks:
       elastic-stack-example:
     depends_on:
-        - elasticsearch
+      elasticsearch:
+        condition: service_healthy
 
   kibana:
     image: docker.elastic.co/kibana/kibana:8.6.0
@@ -25,7 +26,17 @@ services:
     networks:
       elastic-stack-example:
     depends_on:
-      - elasticsearch
+      elasticsearch:
+        condition: service_healthy
+
+  kibana-init:
+    image: alpine:latest
+    container_name: kibana-init
+    networks:
+      elastic-stack-example:
+    depends_on:
+      kibana:
+        condition: service_healthy
 
   elasticstack-api:
     image: ${DOCKER_REGISTRY-}elasticstack-api

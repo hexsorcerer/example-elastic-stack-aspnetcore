@@ -26,6 +26,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "logstash", "logstash", "{CB
 		Logging\logstash\logstash.yml = Logging\logstash\logstash.yml
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "kibana", "kibana", "{7F6D5442-2FCD-4641-AF8E-4A0B23F4F818}"
+	ProjectSection(SolutionItems) = preProject
+		Logging\kibana\dashboards.json = Logging\kibana\dashboards.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +56,7 @@ Global
 		{239B0A31-F575-4052-AA76-5FBDE1C45CC1} = {5FBF7D1C-A66A-47D6-893E-468674D8F770}
 		{B5C41B22-7CFA-4859-BEF3-594FD652E002} = {239B0A31-F575-4052-AA76-5FBDE1C45CC1}
 		{CB99C533-221D-4C0D-A01F-1A37477EBF99} = {239B0A31-F575-4052-AA76-5FBDE1C45CC1}
+		{7F6D5442-2FCD-4641-AF8E-4A0B23F4F818} = {239B0A31-F575-4052-AA76-5FBDE1C45CC1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9CFF407E-AAA0-462A-9C7E-42D8D3B3DC9B}

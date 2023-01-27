@@ -25,7 +25,7 @@ public class WeatherForecastController : ControllerBase
         {
             Path = "/home/me/mystuff",
             Name = "somefile",
-            Type = "txt"
+            Type = new Random().Next(1, 101) % 2 == 0 ? "txt" : "pdf"
         };
 
         _logger.LogInformation("{@File}", file);
