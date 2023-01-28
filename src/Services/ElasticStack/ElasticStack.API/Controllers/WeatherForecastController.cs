@@ -39,6 +39,9 @@ public class WeatherForecastController : ControllerBase
         };
 
         _logger.LogInformation("{@Error}{@File}", error, file);
+        _logger.LogInformation(
+            "This message has no {ElasticCommonSchema} fields so it will appear in the console too",
+            nameof(Elastic.CommonSchema));
 
         return Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {

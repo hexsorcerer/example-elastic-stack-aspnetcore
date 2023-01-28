@@ -5,6 +5,7 @@ using Elastic.CommonSchema.Serilog;
 using ElasticStack.API.Application.MappingProfiles;
 using ElasticStack.API.Services;
 using Serilog;
+using Serilog.Filters;
 
 var configuration = GetConfiguration();
 Log.Logger = CreateSerilogLogger(configuration);
@@ -24,7 +25,14 @@ builder.Host.UseSerilog((context, serviceProvider, config) =>
 
     config.Enrich.WithProperty("ApplicationContext", Assembly.GetExecutingAssembly().GetName().Name);
 
-    config.WriteTo.Console(formatProvider: CultureInfo.InvariantCulture);
+    config.WriteTo.Logger(configLogger =>
+    {
+        configLogger
+            .Filter.ByExcluding(Matching.WithProperty(nameof(Elastic.CommonSchema.Error)))
+            .Filter.ByExcluding(Matching.WithProperty(nameof(Elastic.CommonSchema.File)))
+            .WriteTo.Console(formatProvider: CultureInfo.InvariantCulture);
+    });
+
     config.WriteTo.Http(
         requestUri: "http://logstash:5000",
         queueLimitBytes: null,
