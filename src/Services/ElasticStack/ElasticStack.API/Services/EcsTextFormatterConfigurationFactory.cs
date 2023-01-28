@@ -36,7 +36,13 @@ public class EcsTextFormatterConfigurationFactory : IEcsTextFormatterConfigurati
             return ecsLogEvent;
         }
 
-        ecsLogEvent.File = _mapper.Map<Elastic.CommonSchema.File>(property);
+        var fileProperty = _mapper.Map<Elastic.CommonSchema.File>(property);
+        if (fileProperty is null)
+        {
+            return ecsLogEvent;
+        }
+
+        ecsLogEvent.File = fileProperty;
         return ecsLogEvent;
     }
 

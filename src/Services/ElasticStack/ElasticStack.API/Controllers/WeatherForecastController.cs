@@ -28,7 +28,7 @@ public class WeatherForecastController : ControllerBase
             Type = new Random().Next(1, 101) % 2 == 0 ? "txt" : "pdf"
         };
 
-        _logger.LogInformation("{@File}", file);
+        _logger.LogInformation("{@File}", "file");
 
         return Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {
