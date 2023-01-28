@@ -1,4 +1,5 @@
 using AutoMapper;
+using Elastic.CommonSchema;
 using Elastic.CommonSchema.Serilog;
 using Serilog;
 using Serilog.Events;
@@ -23,27 +24,55 @@ public class EcsTextFormatterConfigurationFactory : IEcsTextFormatterConfigurati
         var formatterConfig = new EcsTextFormatterConfiguration();
         formatterConfig.MapHttpContext(httpAccessor);
 
-        formatterConfig.MapCustom(MapCustomFileLogEvent);
+        formatterConfig.MapCustom((ecsLogEvent, logEvent) =>
+        {
+            MapCustomErrorLogEvent(ecsLogEvent, logEvent);
+            MapCustomFileLogEvent(ecsLogEvent, logEvent);
+            return ecsLogEvent;
+        });
 
         return formatterConfig;
     }
 
-    private Elastic.CommonSchema.Base MapCustomFileLogEvent(Elastic.CommonSchema.Base ecsLogEvent, LogEvent logEvent)
+    private void MapCustomErrorLogEvent(Base ecsLogEvent, LogEvent logEvent)
+    {
+        var property = TryGetErrorProperty(logEvent);
+        if (property is null)
+        {
+            return;
+        }
+
+        var errorProperty = _mapper.Map<Error>(property);
+        if (errorProperty is null)
+        {
+            return;
+        }
+
+        ecsLogEvent.Error = errorProperty;
+    }
+
+    private LogEventPropertyValue? TryGetErrorProperty(LogEvent logEvent)
+    {
+        const string className = nameof(Elastic.CommonSchema.Error);
+        _ = logEvent.Properties.TryGetValue(className, out var propertyValue);
+        return propertyValue;
+    }
+
+    private void MapCustomFileLogEvent(Base ecsLogEvent, LogEvent logEvent)
     {
         var property = TryGetFileProperty(logEvent);
         if (property is null)
         {
-            return ecsLogEvent;
+            return;
         }
 
         var fileProperty = _mapper.Map<Elastic.CommonSchema.File>(property);
         if (fileProperty is null)
         {
-            return ecsLogEvent;
+            return;
         }
 
         ecsLogEvent.File = fileProperty;
-        return ecsLogEvent;
     }
 
     private LogEventPropertyValue? TryGetFileProperty(LogEvent logEvent)

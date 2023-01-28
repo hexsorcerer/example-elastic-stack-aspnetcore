@@ -21,14 +21,24 @@ public class WeatherForecastController : ControllerBase
     [HttpGet(Name = "GetWeatherForecast")]
     public IEnumerable<WeatherForecast> Get()
     {
+        var error = new Elastic.CommonSchema.Error
+        {
+            Code = "666",
+            Id = Guid.NewGuid().ToString(),
+            Message = "Guru Meditation",
+            StackTrace = "Bad stuff happened here => and here => and here",
+            Type = "StackOverflow"
+        };
+
         var file = new Elastic.CommonSchema.File
         {
             Path = "/home/me/mystuff",
             Name = "somefile",
+            // provides some variable data to see in the kibana dashboard
             Type = new Random().Next(1, 101) % 2 == 0 ? "txt" : "pdf"
         };
 
-        _logger.LogInformation("{@File}", "file");
+        _logger.LogInformation("{@Error}{@File}", error, file);
 
         return Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {
