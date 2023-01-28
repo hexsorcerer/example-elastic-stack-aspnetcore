@@ -172,6 +172,12 @@ a field in the incoming message.
 The stackoverflow question that showed me how to structure individual fields
 into a new JSON object.
 
+[Writing to different indices: best practices](https://www.elastic.co/guide/en/logstash/current/plugins-outputs-elasticsearch.html#_writing_to_different_indices_best_practices)
+
+Contains the extremely helpful and not immediately obvious tip that every output
+plugin is a separate connection, so writing your ```logstash.conf``` in such a
+way to minimize these can be a good thing to strive for.
+
 ## Plugins
 ### Input
 [Introducing the Logstash HTTP input plugin](https://www.elastic.co/blog/introducing-logstash-input-http-plugin)
