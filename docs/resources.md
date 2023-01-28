@@ -265,6 +265,11 @@ the log message. It's clunky but it does work!
 
 The base API docs.
 
+[Configure Kibana](https://www.elastic.co/guide/en/kibana/current/settings.html)
+
+Covers all the various options available to Kibana. There's actually very little
+you need to get it working, but if you need something more you can find it here.
+
 [Export objects API](https://www.elastic.co/guide/en/kibana/current/saved-objects-api-export.html)
 
 Provides the API documentation for how to export stuff from Kibana. Be careful
