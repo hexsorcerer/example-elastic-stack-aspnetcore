@@ -1,6 +1,8 @@
 using System.Globalization;
 using System.Reflection;
+using AutoMapper;
 using Elastic.CommonSchema.Serilog;
+using ElasticStack.API.Application.MappingProfiles;
 using ElasticStack.API.Services;
 using Serilog;
 
@@ -8,12 +10,16 @@ var configuration = GetConfiguration();
 Log.Logger = CreateSerilogLogger(configuration);
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
-
-builder.Host.UseSerilog((ctx, config) =>
+builder.Services.AddAutoMapper((config) =>
 {
-    IEcsTextFormatterConfigurationFactory factory = new EcsTextFormatterConfigurationFactory();
-    var formatterConfig = factory.BuildEcsTextFormatterConfiguration(ctx, config);
+    config.AddProfile<EcsMapperProfile>();
+});
+
+builder.Host.UseSerilog((context, serviceProvider, config) =>
+{
+    IEcsTextFormatterConfigurationFactory factory = new EcsTextFormatterConfigurationFactory(
+        serviceProvider.GetRequiredService<IMapper>());
+    var formatterConfig = factory.BuildEcsTextFormatterConfiguration(context, config);
     var formatter = new EcsTextFormatter(formatterConfig);
 
     config.Enrich.WithProperty("ApplicationContext", Assembly.GetExecutingAssembly().GetName().Name);
@@ -23,7 +29,7 @@ builder.Host.UseSerilog((ctx, config) =>
         requestUri: "http://logstash:5000",
         queueLimitBytes: null,
         textFormatter: formatter,
-        configuration: ctx.Configuration);
+        configuration: context.Configuration);
 });
 
 // Add services to the container.

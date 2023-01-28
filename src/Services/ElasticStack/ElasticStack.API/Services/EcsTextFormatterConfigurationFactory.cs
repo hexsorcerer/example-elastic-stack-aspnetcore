@@ -1,6 +1,5 @@
 using AutoMapper;
 using Elastic.CommonSchema.Serilog;
-using ElasticStack.API.Application.TypeConverters;
 using Serilog;
 using Serilog.Events;
 
@@ -8,6 +7,12 @@ namespace ElasticStack.API.Services;
 
 public class EcsTextFormatterConfigurationFactory : IEcsTextFormatterConfigurationFactory
 {
+    private readonly IMapper _mapper;
+
+    public EcsTextFormatterConfigurationFactory(IMapper mapper)
+    {
+        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+    }
     public EcsTextFormatterConfiguration BuildEcsTextFormatterConfiguration(
         HostBuilderContext context,
         LoggerConfiguration config)
@@ -18,25 +23,27 @@ public class EcsTextFormatterConfigurationFactory : IEcsTextFormatterConfigurati
         var formatterConfig = new EcsTextFormatterConfiguration();
         formatterConfig.MapHttpContext(httpAccessor);
 
-        var mapConfig = new MapperConfiguration(cfg =>
-            cfg.CreateMap<LogEventPropertyValue, Elastic.CommonSchema.File>()
-                .ConvertUsing(new ElasticCommonSchemaFileTypeConverter()));
-
-        var mapper = mapConfig.CreateMapper();
-
-        formatterConfig.MapCustom((ecsLogEvent, logEvent) =>
-        {
-            const string className = nameof(Elastic.CommonSchema.File);
-            var success = logEvent.Properties.TryGetValue(className, out var propertyValue);
-            if (!success || propertyValue is null)
-            {
-                return ecsLogEvent;
-            }
-
-            ecsLogEvent.File = mapper.Map<Elastic.CommonSchema.File>(propertyValue);
-            return ecsLogEvent;
-        });
+        formatterConfig.MapCustom(MapCustomFileLogEvent);
 
         return formatterConfig;
+    }
+
+    private Elastic.CommonSchema.Base MapCustomFileLogEvent(Elastic.CommonSchema.Base ecsLogEvent, LogEvent logEvent)
+    {
+        var property = TryGetFileProperty(logEvent);
+        if (property is null)
+        {
+            return ecsLogEvent;
+        }
+
+        ecsLogEvent.File = _mapper.Map<Elastic.CommonSchema.File>(property);
+        return ecsLogEvent;
+    }
+
+    private LogEventPropertyValue? TryGetFileProperty(LogEvent logEvent)
+    {
+        const string className = nameof(Elastic.CommonSchema.File);
+        _ = logEvent.Properties.TryGetValue(className, out var propertyValue);
+        return propertyValue;
     }
 }
