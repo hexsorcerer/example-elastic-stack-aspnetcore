@@ -21,6 +21,15 @@ public class WeatherForecastController : ControllerBase
     [HttpGet(Name = "GetWeatherForecast")]
     public IEnumerable<WeatherForecast> Get()
     {
+        var agent = new Elastic.CommonSchema.Agent
+        {
+            EphemeralId = "8a4f500f",
+            Id = "8a4f500d",
+            Name = "foo",
+            Type = "filebeat",
+            Version = "6.0.0-rc2"
+        };
+
         var error = new Elastic.CommonSchema.Error
         {
             Code = "666",
@@ -38,7 +47,7 @@ public class WeatherForecastController : ControllerBase
             Type = new Random().Next(1, 101) % 2 == 0 ? "txt" : "pdf"
         };
 
-        _logger.LogInformation("{@Error}{@File}", error, file);
+        _logger.LogInformation("{@Agent}{@Error}{@File}", agent, error, file);
         _logger.LogInformation(
             "This message has no {ElasticCommonSchema} fields so it will appear in the console too",
             nameof(Elastic.CommonSchema));

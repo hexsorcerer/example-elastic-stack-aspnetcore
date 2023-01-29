@@ -26,12 +26,37 @@ public class EcsTextFormatterConfigurationFactory : IEcsTextFormatterConfigurati
 
         formatterConfig.MapCustom((ecsLogEvent, logEvent) =>
         {
+            MapCustomAgentLogEvent(ecsLogEvent, logEvent);
             MapCustomErrorLogEvent(ecsLogEvent, logEvent);
             MapCustomFileLogEvent(ecsLogEvent, logEvent);
             return ecsLogEvent;
         });
 
         return formatterConfig;
+    }
+
+    private void MapCustomAgentLogEvent(Base ecsLogEvent, LogEvent logEvent)
+    {
+        var property = TryGetAgentProperty(logEvent);
+        if (property is null)
+        {
+            return;
+        }
+
+        var agentProperty = _mapper.Map<Agent>(property);
+        if (agentProperty is null)
+        {
+            return;
+        }
+
+        ecsLogEvent.Agent = agentProperty;
+    }
+
+    private LogEventPropertyValue? TryGetAgentProperty(LogEvent logEvent)
+    {
+        const string className = nameof(Agent);
+        _ = logEvent.Properties.TryGetValue(className, out var propertyValue);
+        return propertyValue;
     }
 
     private void MapCustomErrorLogEvent(Base ecsLogEvent, LogEvent logEvent)
@@ -53,7 +78,7 @@ public class EcsTextFormatterConfigurationFactory : IEcsTextFormatterConfigurati
 
     private LogEventPropertyValue? TryGetErrorProperty(LogEvent logEvent)
     {
-        const string className = nameof(Elastic.CommonSchema.Error);
+        const string className = nameof(Error);
         _ = logEvent.Properties.TryGetValue(className, out var propertyValue);
         return propertyValue;
     }

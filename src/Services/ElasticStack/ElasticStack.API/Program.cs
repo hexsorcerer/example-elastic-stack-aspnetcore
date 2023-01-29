@@ -28,6 +28,7 @@ builder.Host.UseSerilog((context, serviceProvider, config) =>
     config.WriteTo.Logger(configLogger =>
     {
         configLogger
+            .Filter.ByExcluding(Matching.WithProperty(nameof(Elastic.CommonSchema.Agent)))
             .Filter.ByExcluding(Matching.WithProperty(nameof(Elastic.CommonSchema.Error)))
             .Filter.ByExcluding(Matching.WithProperty(nameof(Elastic.CommonSchema.File)))
             .WriteTo.Console(formatProvider: CultureInfo.InvariantCulture);

@@ -10,6 +10,9 @@ public class EcsMapperProfile : Profile
     // avoid putting empty objects on the log event
     public EcsMapperProfile()
     {
+        CreateMap<LogEventPropertyValue, Elastic.CommonSchema.Agent>()
+            .ConvertUsing(new ElasticCommonSchemaAgentTypeConverter());
+
         CreateMap<LogEventPropertyValue, Elastic.CommonSchema.Error>()
             .ConvertUsing(new ElasticCommonSchemaErrorTypeConverter());
 
