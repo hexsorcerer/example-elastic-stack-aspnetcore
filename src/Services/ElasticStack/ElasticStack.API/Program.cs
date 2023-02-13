@@ -2,10 +2,10 @@ using System.Globalization;
 using System.Reflection;
 using AutoMapper;
 using Elastic.CommonSchema.Serilog;
-using ElasticStack.API.Application.MappingProfiles;
-using ElasticStack.API.Services;
 using Serilog;
 using Serilog.Filters;
+using SerilogEcsMapper.API;
+using SerilogEcsMapper.API.Profiles;
 
 var configuration = GetConfiguration();
 Log.Logger = CreateSerilogLogger(configuration);
@@ -13,14 +13,16 @@ Log.Logger = CreateSerilogLogger(configuration);
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAutoMapper((config) =>
 {
-    config.AddProfile<EcsMapperProfile>();
+    config.AddProfile<SerilogEcsMapperProfile>();
 });
 
 builder.Host.UseSerilog((context, serviceProvider, config) =>
 {
-    IEcsTextFormatterConfigurationFactory factory = new EcsTextFormatterConfigurationFactory(
-        serviceProvider.GetRequiredService<IMapper>());
-    var formatterConfig = factory.BuildEcsTextFormatterConfiguration(context, config);
+    var mapper = serviceProvider.GetRequiredService<IMapper>();
+    var formatterConfig = new EcsTextFormatterConfigurationBuilder(mapper)
+        .WithAll()
+        .Build();
+
     var formatter = new EcsTextFormatter(formatterConfig);
 
     config.Enrich.WithProperty("ApplicationContext", Assembly.GetExecutingAssembly().GetName().Name);
