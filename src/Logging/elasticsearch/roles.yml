@@ -1,0 +1,6 @@
+healthcheck:
+  cluster: [ 'manage', 'manage_security' ]
+  indices:
+    - names: [ '.kibana*', '.apm*' ]
+      privileges: [ 'all' ]
+      allow_restricted_indices: true

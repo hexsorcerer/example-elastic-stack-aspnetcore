@@ -5,8 +5,13 @@ services:
   elasticsearch:
     environment:
       discovery.type: single-node
-      xpack.security.enabled: false
+      xpack.security.enabled: true
+      xpack.security.authc.anonymous.username: _es_anonymous_user
+      xpack.security.authc.anonymous.roles: healthcheck
+      xpack.security.authc.anonymous.authz_exception: true
       ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+      ELASTIC_USERNAME: elastic
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -17,7 +22,11 @@ services:
       - elasticsearch-data:/usr/share/elasticsearch/data
       - type: bind
         source: Logging/elasticsearch/elasticsearch.yml
-        target: /etc/elasticsearch/elasticsearch.yml
+        target: /usr/share/elasticsearch/config/elasticsearch.yml
+        read_only: true
+      - type: bind
+        source: Logging/elasticsearch/roles.yml
+        target: /usr/share/elasticsearch/config/roles.yml
         read_only: true
     healthcheck:
       test: ["CMD-SHELL", "curl --silent --fail localhost:9200/_cluster/health || exit 1"]
@@ -52,12 +61,14 @@ services:
       - kibana-data:/usr/share/kibana/data
     environment:
       ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+      elasticsearch.username: elastic
+      elasticsearch.password: ${ELASTIC_PASSWORD}
     ports:
       - "5601:5601"
     expose:
       - "5601"
     healthcheck:
-      test: ["CMD-SHELL", "curl --silent --fail -X GET localhost:5601/api/index_management/indices -H 'kbn-xsrf:true' || exit 1"]
+      test: ["CMD-SHELL", "curl --user elastic:${ELASTIC_PASSWORD} --silent --fail -X GET localhost:5601/api/index_management/indices -H 'kbn-xsrf:true' || exit 1"]
       interval: 1s
       timeout: 3s
       retries: 30
@@ -79,7 +90,7 @@ services:
       - /bin/sh
       - -c
       - |
-        apk --no-cache add curl
+        apk --no-cache add curl        
         curl -i -X POST http://kibana:5601/api/saved_objects/_import -H 'kbn-xsrf:true' --form file=@dashboards.ndjson
 
 volumes:
