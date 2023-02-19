@@ -18,6 +18,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "elasticsearch", "elasticsearch", "{B5C41B22-7CFA-4859-BEF3-594FD652E002}"
 	ProjectSection(SolutionItems) = preProject
 		Logging\elasticsearch\elasticsearch.yml = Logging\elasticsearch\elasticsearch.yml
+		Logging\elasticsearch\instances.yml = Logging\elasticsearch\instances.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "logstash", "logstash", "{CB99C533-221D-4C0D-A01F-1A37477EBF99}"

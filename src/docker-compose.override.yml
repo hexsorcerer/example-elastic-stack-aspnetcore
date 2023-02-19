@@ -2,6 +2,29 @@ version: '3.4'
 
 services:
 
+  elasticsearch-certs:
+    command:
+      - /bin/bash
+      - -c
+      - |
+        if [[ ! -f /certs/bundle.zip ]]; then
+          bin/elasticsearch-certutil ca --pem --out /certs/ca.zip
+          unzip /certs/ca.zip -d /certs
+          rm /certs/ca.zip
+          bin/elasticsearch-certutil cert --ca-cert /certs/ca/ca.crt --ca-key /certs/ca/ca.key --pem --in ${CERTS_DIR}/elasticsearch/instances.yml --out /certs/bundle.zip;
+          unzip /certs/bundle.zip -d /certs
+          rm /certs/bundle.zip          
+        fi;
+        chown -R 1000:0 /certs
+    user: "0"
+    working_dir: /usr/share/elasticsearch
+    volumes:
+      - certs:/certs
+      - type: bind
+        source: Logging/elasticsearch/instances.yml
+        target: ${CERTS_DIR}/elasticsearch/instances.yml
+        read_only: true
+
   elasticsearch:
     environment:
       discovery.type: single-node
@@ -9,6 +32,15 @@ services:
       xpack.security.authc.anonymous.username: _es_anonymous_user
       xpack.security.authc.anonymous.roles: healthcheck
       xpack.security.authc.anonymous.authz_exception: true
+      xpack.security.http.ssl.enabled: true
+      xpack.security.http.ssl.key: ${CERTS_DIR}/elasticsearch/elasticsearch.key
+      xpack.security.http.ssl.certificate_authorities: ${CERTS_DIR}/ca/ca.crt
+      xpack.security.http.ssl.certificate: ${CERTS_DIR}/elasticsearch/elasticsearch.crt
+      xpack.security.transport.ssl.enabled: true
+      xpack.security.transport.ssl.verification_mode: certificate 
+      xpack.security.transport.ssl.certificate_authorities: ${CERTS_DIR}/ca/ca.crt
+      xpack.security.transport.ssl.certificate: ${CERTS_DIR}/elasticsearch/elasticsearch.crt
+      xpack.security.transport.ssl.key: ${CERTS_DIR}/elasticsearch/elasticsearch.key      
       ES_JAVA_OPTS: "-Xms512m -Xmx512m"
       ELASTIC_USERNAME: elastic
       ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
@@ -20,6 +52,7 @@ services:
       - "9300"
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
+      - certs:${CERTS_DIR}
       - type: bind
         source: Logging/elasticsearch/elasticsearch.yml
         target: /usr/share/elasticsearch/config/elasticsearch.yml
@@ -29,10 +62,25 @@ services:
         target: /usr/share/elasticsearch/config/roles.yml
         read_only: true
     healthcheck:
-      test: ["CMD-SHELL", "curl --silent --fail localhost:9200/_cluster/health || exit 1"]
+      test: ["CMD-SHELL", "curl --cacert ${CERTS_DIR}/ca/ca.crt --user elastic:${ELASTIC_PASSWORD} https://localhost:9200/_cluster/health || exit 1"]
       interval: 10s
       timeout: 10s
       retries: 3
+
+  elasticsearch-init:
+    environment:
+      xpack.security.http.ssl.enabled: true
+      xpack.security.enrollment.enabled: true
+      xpack.security.http.ssl.certificate_authorities: ${CERTS_DIR}/ca/ca.crt
+      elasticsearch.ssl.verificationMode: certificate
+    volumes:
+      - certs:${CERTS_DIR}
+    command:
+      - /bin/bash
+      - -c
+      - |
+        bin/elasticsearch-create-enrollment-token -s kibana --url "https://elasticsearch:9200"
+        cat ${CERTS_DIR}/kibana/enrollment.token
 
   logstash:
     environment:
@@ -59,16 +107,23 @@ services:
   kibana:
     volumes:
       - kibana-data:/usr/share/kibana/data
+      - certs:${CERTS_DIR}
     environment:
-      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+      elasticsearch.hosts: https://elasticsearch:9200
       elasticsearch.username: elastic
       elasticsearch.password: ${ELASTIC_PASSWORD}
+      elasticsearch.ssl.certificateAuthorities: ${CERTS_DIR}/ca/ca.crt
+      elasticsearch.ssl.certificate: ${CERTS_DIR}/elasticsearch/elasticsearch.crt
+      elasticsearch.ssl.key: ${CERTS_DIR}/elasticsearch/elasticsearch.key
+      server.ssl.certificate: ${CERTS_DIR}/kibana/kibana.crt
+      server.ssl.key: ${CERTS_DIR}/kibana/kibana.key
+      server.ssl.enabled: true
     ports:
       - "5601:5601"
     expose:
       - "5601"
     healthcheck:
-      test: ["CMD-SHELL", "curl --user elastic:${ELASTIC_PASSWORD} --silent --fail -X GET localhost:5601/api/index_management/indices -H 'kbn-xsrf:true' || exit 1"]
+      test: ["CMD-SHELL", "curl --cacert ${CERTS_DIR}/ca/ca.crt --user elastic:${ELASTIC_PASSWORD} -X GET https://localhost:5601/api/index_management/indices -H 'kbn-xsrf:true' || exit 1"]
       interval: 1s
       timeout: 3s
       retries: 30
@@ -97,4 +152,6 @@ volumes:
   elasticsearch-data:
     driver: local
   kibana-data:
+    driver: local
+  certs:
     driver: local

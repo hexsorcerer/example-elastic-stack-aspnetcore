@@ -291,4 +291,113 @@ you "must" omit the Content-Type header when importing or else it doesn't work
 command.) You also need to use ```--form file=@<path-to-file>``` and not the
 ```-d``` option that you see in many similar examples floating around out there.
 
+# Unsorted
+Temporarily saving the bajillion tabs I have open right now, will sort later.
+
+[elasticsearch-create-enrollment-token](https://www.elastic.co/guide/en/elasticsearch/reference/current/create-enrollment-token.html)
+
+[ERROR: Failed to determine the health of the cluster](https://stackoverflow.com/questions/71193286/error-failed-to-determine-the-health-of-the-cluster)
+
+Confirmation that you can't run the create-enrollment-token from an outside init
+container.
+
+[kibana-verification-code](https://www.elastic.co/guide/en/kibana/current/kibana-verification-code.html#kibana-verification-code)
+
+[[Discuss] Handle Kibana Not Ready mode #113378](https://github.com/elastic/kibana/issues/113378)
+
+[How to enable SSL (https) for Kibana?](https://discuss.elastic.co/t/how-to-enable-ssl-https-for-kibana/224161)
+
+[Configure Kibana](https://www.elastic.co/guide/en/kibana/current/settings.html)
+
+Reference for all the kibana variables.
+
+[How to execute command from one docker container to another](https://stackoverflow.com/questions/59035543/how-to-execute-command-from-one-docker-container-to-another)
+
+[Install Elasticsearch with Docker](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html)
+
+Has an example docker compose file.
+
+[“Kibana server is not ready yet” (running with docker-compose)](https://discuss.elastic.co/t/kibana-server-is-not-ready-yet-running-with-docker-compose/279627)
+
+[Setup basic security for the Elastic Stack plus secured HTTPS traffic](https://www.elastic.co/guide/en/elasticsearch/reference/8.6/security-basic-setup-https.html#encrypt-kibana-elasticsearch)
+https://stackoverflow.com/questions/71209359/how-to-access-)
+
+-system-indices-like-kibana-indices-in-the-latest-elasticsear
+[Testing TLS/SSL secured elastic cluster](https://discuss.elastic.co/t/testing-tls-ssl-secured-elastic-cluster/250572)
+
+[elastic/apm-server/docker-compose.yml](https://github.com/elastic/apm-server/blob/main/docker-compose.yml)
+
+[shavo007/docker-compose.yml](https://gist.github.com/shavo007/d426d9838c4dcadfbcd384ac68b6c69d)
+
+[Set up basic security for the Elastic Stack](https://www.elastic.co/guide/en/elasticsearch/reference/current/security-basic-setup.html)
+
+[Configure SSL/TLS for self-managed Fleet Server](https://www.elastic.co/guide/en/elasticsearch/reference/current/security-basic-setup.html)
+
+[elasticsearch-certutil](https://www.elastic.co/guide/en/elasticsearch/reference/current/certutil.html)
+
+[How to start a Elasticsearch Docker Container with SSL/TLS encryption](https://raphaeldelio.medium.com/how-to-start-a-elasticsearch-docker-container-with-ssl-tls-encryption-c3cf7e00c646)
+
+[Enabling HTTPS for Elasticsearch](https://www.ibm.com/docs/en/sle/10.2.0?topic=elasticsearch-enabling-https)
+
+[HTTP/REST clients and security](https://www.elastic.co/guide/en/elasticsearch/reference/current/http-clients.html)
+
+[REST API](https://www.elastic.co/guide/en/kibana/current/api.html)
+
+[Defining roles](https://www.elastic.co/guide/en/elasticsearch/reference/current/defining-roles.html)
+
+[Install Kibana with Docker](https://www.elastic.co/guide/en/kibana/current/docker.html)
+
+[Getting started with Elasticsearch security](https://www.elastic.co/blog/getting-started-with-elasticsearch-security)
+
+[Implement create enrollment token API #71438](https://github.com/elastic/elasticsearch/issues/71438)
+
+[jlim0930/scripts/deploy-elastic.sh](https://github.com/jlim0930/scripts/blob/master/deploy-elastic.sh)
+
+[Configure security in Kibana](https://www.elastic.co/guide/en/kibana/current/using-kibana-with-security.html)
+
+[How to access the system indices like .kibana* indices in the latest elasticsearch version](https://stackoverflow.com/questions/71209359/how-to-access-the-system-indices-like-kibana-indices-in-the-latest-elasticsear)
+
+[Authentication in Kibana](https://www.elastic.co/guide/en/kibana/8.6/kibana-authentication.html)
+
+[Action failed with 'security_exception: [security_exception] Reason: action [indices:admin/create] is unauthorized for user](https://stackoverflow.com/questions/72911440/action-failed-with-security-exception-security-exception-reason-action-ind)
+
+[Index management in Kibana](https://www.elastic.co/guide/en/elasticsearch/reference/8.6/index-mgmt.html)
+
+[Built-in users](https://www.elastic.co/guide/en/elasticsearch/reference/current/built-in-users.html)
+
+[Logging](https://www.elastic.co/guide/en/elasticsearch/reference/current/logging.html)
+
+[Configuring Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html)
+
+[Built-in roles](https://www.elastic.co/guide/en/elasticsearch/reference/current/built-in-roles.html)
+
+[Create or update users API](https://www.elastic.co/guide/en/elasticsearch/reference/current/security-api-put-user.html)
+
+[Create or update roles API](https://www.elastic.co/guide/en/elasticsearch/reference/current/security-api-put-role.html)
+
+[Enabling anonymous access](https://www.elastic.co/guide/en/elasticsearch/reference/current/anonymous-access.html)
+
+[Anonymous user to access /_cluster/health?](https://discuss.elastic.co/t/anonymous-user-to-access-cluster-health/150269)
+
+[Secuerity privileges](https://www.elastic.co/guide/en/elasticsearch/reference/current/security-privileges.html#privileges-list-cluster)
+
+[Does elastic have a healthcheck endpoint that does not require username and password](https://discuss.elastic.co/t/does-elastic-have-a-healthcheck-endpoint-that-does-not-require-username-and-password/217090)
+
+[Cluster health API](https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-health.html)
+
+[Security settings in Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/security-settings.html#anonymous-access-settings)
+
+[Health API](https://www.elastic.co/guide/en/elasticsearch/reference/current/health-api.html)
+
+[Get token API](https://www.elastic.co/guide/en/elasticsearch/reference/current/security-api-get-token.html)
+
+[Install Elasticsearch with Docker](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-compose-file)
+
+[Elasticsearch X-Pack Basic Security is Off](https://opster.com/guides/elasticsearch/security/elasticsearch-x-pack-basic-security-is-off/)
+
+[elasticsearch-reset-password](https://www.elastic.co/guide/en/elasticsearch/reference/current/reset-password.html)
+
+[Change passwords API](https://www.elastic.co/guide/en/elasticsearch/reference/current/security-api-change-password.html)
+
+[Setup minimal security for Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/security-minimal-setup.html)
 

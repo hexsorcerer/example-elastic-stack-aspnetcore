@@ -5,11 +5,29 @@ networks:
 
 services:
 
+  elasticsearch-certs:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.6.0
+    container_name: elasticsearch-certs
+    networks:
+      elastic-stack-example:
+
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.6.0
     container_name: elasticsearch
     networks:
       elastic-stack-example:
+    depends_on:
+      elasticsearch-certs:
+        condition: service_completed_successfully
+
+  elasticsearch-init:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.6.0
+    container_name: elasticsearch-init
+    networks:
+      elastic-stack-example:
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
 
   logstash:
     image: docker.elastic.co/logstash/logstash:8.6.0
@@ -17,8 +35,8 @@ services:
     networks:
       elastic-stack-example:
     depends_on:
-      elasticsearch:
-        condition: service_healthy
+      elasticsearch-init:
+        condition: service_completed_successfully
 
   kibana:
     image: docker.elastic.co/kibana/kibana:8.6.0
@@ -26,8 +44,8 @@ services:
     networks:
       elastic-stack-example:
     depends_on:
-      elasticsearch:
-        condition: service_healthy
+      elasticsearch-init:
+        condition: service_completed_successfully
 
   kibana-init:
     image: alpine:latest
