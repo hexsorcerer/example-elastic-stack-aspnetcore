@@ -30,6 +30,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "kibana", "kibana", "{7F6D5442-2FCD-4641-AF8E-4A0B23F4F818}"
 	ProjectSection(SolutionItems) = preProject
 		Logging\kibana\dashboards.json = Logging\kibana\dashboards.json
+		Logging\kibana\kibana.yml = Logging\kibana\kibana.yml
 	EndProjectSection
 EndProject
 Global

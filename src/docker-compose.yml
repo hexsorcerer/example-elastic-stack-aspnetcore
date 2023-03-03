@@ -5,47 +5,38 @@ networks:
 
 services:
 
-  elasticsearch-certs:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.6.0
-    container_name: elasticsearch-certs
+  elasticsearch-security-setup:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+    container_name: elasticsearch-security-setup
     networks:
       elastic-stack-example:
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.6.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
     container_name: elasticsearch
     networks:
       elastic-stack-example:
     depends_on:
-      elasticsearch-certs:
-        condition: service_completed_successfully
+      elasticsearch-security-setup:
+        condition: service_healthy
 
-  elasticsearch-init:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.6.0
-    container_name: elasticsearch-init
+  logstash:
+    image: docker.elastic.co/logstash/logstash:${STACK_VERSION}
+    container_name: logstash
     networks:
       elastic-stack-example:
     depends_on:
       elasticsearch:
         condition: service_healthy
 
-  logstash:
-    image: docker.elastic.co/logstash/logstash:8.6.0
-    container_name: logstash
-    networks:
-      elastic-stack-example:
-    depends_on:
-      elasticsearch-init:
-        condition: service_completed_successfully
-
   kibana:
-    image: docker.elastic.co/kibana/kibana:8.6.0
+    image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
     container_name: kibana    
     networks:
       elastic-stack-example:
     depends_on:
-      elasticsearch-init:
-        condition: service_completed_successfully
+      elasticsearch:
+        condition: service_healthy
 
   kibana-init:
     image: alpine:latest
@@ -55,6 +46,17 @@ services:
     depends_on:
       kibana:
         condition: service_healthy
+
+  fleet-server:
+      depends_on:
+        kibana:
+          condition: service_healthy
+        elasticsearch:
+          condition: service_healthy
+      image: docker.elastic.co/beats/elastic-agent:${STACK_VERSION}
+      container_name: fleet-server
+      networks:
+        elastic-stack-example:
 
   elasticstack-api:
     image: ${DOCKER_REGISTRY-}elasticstack-api
